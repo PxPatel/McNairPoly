@@ -56,6 +56,11 @@ public class McNairPoly
         int currPos = players[turn].getPos();
         int newPos = (currPos + roll) % board.length;
         players[turn].setPos(newPos);
+
+        if(currPos > newPos)
+        {
+            // players[turn].passGo();
+        }
     }
 
     public boolean isOwned()
@@ -67,10 +72,24 @@ public class McNairPoly
 
     public void action()
     {
-        Property landed = board[players[turn].getPos()];
+        Player mainPlayer = players[turn]; 
+        Property landed = board[mainPlayer.getPos()];
         if(landed.isSpecial())
         {
-            //STUFF
+            /*
+            if(landed.isTax)
+            {
+                mainPlayer.payTax();
+            }
+            else if(landed.isDoubleLunch)
+            {
+                mainPlayer.inDoubleLunch();
+            }
+            else if(landed.isDetention)
+            {
+                mainPlayer.inDetention();
+            }
+            */
         }
         else if(!landed.isOwned())
         {
@@ -79,7 +98,7 @@ public class McNairPoly
             if(choice.equals("Y"))
             {
                 players[turn].buy(landed);
-                System.out.println(players[turn].getName() + " just bought " + landed.getName() + "!");
+                System.out.println(mainPlayer.getName() + " just bought " + landed.getName() + "!");
             }
         }
         else if(landed.isOwned())
@@ -87,12 +106,12 @@ public class McNairPoly
             if(players[turn].getGPA() >= landed.getRent())
             {
                 players[turn].payRent(landed);
-                System.out.println(players[turn].getName() + " has payed $" + landed.getRent() + " to " + landed.getOwner().getName());
+                System.out.println(mainPlayer.getName() + " has payed $" + landed.getRent() + " to " + landed.getOwner().getName());
             }
             else
             {
                 players[turn].bankrupt(landed.getOwner());
-                System.out.println(players[turn].getName() + " is BANKRUPT!");
+                System.out.println(mainPlayer.getName() + " is BANKRUPT!");
             }
         }
     }

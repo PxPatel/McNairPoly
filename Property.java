@@ -2,6 +2,12 @@ public class Property extends Space
 {
 
     private boolean isSpecial;
+    private boolean isTax;
+    private boolean isDoubleLunch;
+    private boolean isDetention;
+    private boolean isStudying;
+
+
     private int cost;
     private boolean isOwned;
     private Player owner;
@@ -11,27 +17,45 @@ public class Property extends Space
     public Property(int loc)
     {
         super("Blank", loc);
+        isSpecial = false;
+        isTax = false;
+        isDoubleLunch = false;
+        isDetention = false;
+        isStudying = false;
+
         cost = 1;
         isOwned = false;
         owner = null;
-        isSpecial = false;
         rent = 2;
     }
     
-    public Property(String name, int loc, boolean isSpecial)
+    //A special space constructor
+    public Property(String name, int loc, boolean isTax, boolean isDoubleLunch, boolean isDetention, boolean isStudying)
     {
         super(name, loc);
-        this.isSpecial = isSpecial;
-        this.cost = -1;
-        this.isOwned = false;
-        this.owner = null;
-        this.rent = -1;
+        this.isSpecial = true;
+        this.isTax = isTax;
+        this.isDoubleLunch = isDoubleLunch;
+        this.isDetention = isDetention;
+        this.isStudying = isStudying;
+        
+        
+        cost = -1;
+        isOwned = false;
+        owner = null;
+        rent = -1;
     }
 
-    public Property(String name, int loc, boolean isSpecial, int cost, int rent)
+    //A classroom space constructor
+    public Property(String name, int loc, int cost, int rent)
     {
         super(name, loc);
-        this.isSpecial = isSpecial;
+        isSpecial = false;
+        isTax = false;
+        isDoubleLunch = false;
+        isDetention = false;
+        isStudying = false;
+
         this.cost = cost;
         isOwned = false;
         owner = null;
@@ -82,6 +106,26 @@ public class Property extends Space
     public void setRent(int rent) 
     {
         this.rent = rent;
+    }
+
+    public boolean isTax()
+    {
+        return isTax;
+    }
+
+    public boolean isDoubleLunch() 
+    {
+        return isDoubleLunch;
+    }
+
+    public boolean isDetention() 
+    {
+        return isDetention;
+    }
+
+    public boolean isStudying() 
+    {
+        return isStudying;
     }
 
     @Override

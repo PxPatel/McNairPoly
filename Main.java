@@ -13,11 +13,11 @@ class Main
             game.nextTurn();
         */
 
-        // game.move();
-        // game.action();
+        game.move();
+        game.action();
 
-        // Player p = game.getPlayers()[0];
-        // System.out.println(p);
+        Player p = game.getPlayers()[0];
+        System.out.println(p);
 
     }
 }

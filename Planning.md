@@ -58,6 +58,10 @@ Space
 
 Property extends Spaces
     private isSpecial
+    private isTax;
+    private isDoubleLunch;
+    private isDetention;
+    private isStudying;
     private cost
     private isOwned
     private owner
