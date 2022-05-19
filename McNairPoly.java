@@ -59,7 +59,7 @@ public class McNairPoly
 
         if(currPos > newPos)
         {
-            // players[turn].passGo();
+            players[turn].passGo();
         }
     }
 
@@ -76,11 +76,12 @@ public class McNairPoly
         Property landed = board[mainPlayer.getPos()];
         if(landed.isSpecial())
         {
-            /*
+       
             if(landed.isTax)
             {
                 mainPlayer.payTax();
             }
+	/*
             else if(landed.isDoubleLunch)
             {
                 mainPlayer.inDoubleLunch();
