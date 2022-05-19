@@ -1,15 +1,20 @@
 import java.util.Scanner;
 
+
 public class McNairPoly
 {
     private Player[] players;
     private int numUsers;
-    private Scanner scan = new Scanner(System.in);
     private int turn;
-    private Property[] board;
-    private final int BOARD_SIZE = 22;
     private Player playerAtTurn;
 
+    private Scanner scan = new Scanner(System.in);
+    
+    private Property[] board;
+    private final int BOARD_SIZE = 22;
+
+    private final int oneSecond = 1000; 
+    private final int halfSecond = 500;
 
     public McNairPoly()
     {
@@ -46,11 +51,26 @@ public class McNairPoly
         playerAtTurn = players[0];
     }
 
+    public void sleep()
+    {
+        try
+        {
+            Thread.sleep(oneSecond);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     public int[] roll()
     {
-        int a = (int)(Math.random() * 12) + 1;
-        int b = (int)(Math.random() * 12) + 1;
+        int a = (int)(Math.random() * 6) + 1;
+        int b = (int)(Math.random() * 6) + 1;
         int[] total = {a,b};
+        System.out.println("Rolling...");
+
+        sleep();
 
         System.out.println(playerAtTurn.getName() + " rolled a [" + a + "] [" + b + "]");
 
@@ -59,8 +79,11 @@ public class McNairPoly
 
     public void move()
     {
+        System.out.println("\n" + playerAtTurn.getName() + ", would you like to roll? [ENTER TO CONTINUE]");
+        scan.nextLine();
+
         int[] dice = roll();
-        int roll = dice[1] + dice[2];
+        int roll = dice[0] + dice[1];
 
         int currPos = playerAtTurn.getPos();
         int newPos = (currPos + roll) % board.length;
@@ -70,6 +93,8 @@ public class McNairPoly
         {
             playerAtTurn.passGo();
         }
+
+        System.out.println("\n" + playerAtTurn.getName() + " landed on " + board[newPos]);
     }
 
     public boolean isPlayerInJail()
@@ -99,25 +124,28 @@ public class McNairPoly
             {
                 mainPlayer.payTax();
             }
-	/*
-            else if(landed.isDoubleLunch)
+            // else if(landed.isDoubleLunch)
+            // {
+            //     mainPlayer.inDoubleLunch();
+            // }
+            else if(landed.isDetention())
             {
-                mainPlayer.inDoubleLunch();
+                mainPlayer.putInDetention();
             }
-            else if(landed.isDetention)
-            {
-                mainPlayer.inDetention();
-            }
-            */
+            
         }
         else if(!landed.isOwned())
         {
             System.out.print("Would you like to buy " + landed.getName() + "? (Y/N) ");
-            String choice = scan.nextLine();
-            if(choice.equals("Y"))
+            String choice = scan.nextLine().toUpperCase();
+            if(choice.equals("Y") && playerAtTurn.getGPA() >= landed.getCost())
             {
                 players[turn].buy(landed);
                 System.out.println(mainPlayer.getName() + " just bought " + landed.getName() + "!");
+            }
+            else if(choice.equals("Y"))
+            {
+                System.out.println("Sorry, you don't have enough GPA to buy " + landed.getName());
             }
         }
         else if(landed.isOwned())
@@ -139,7 +167,7 @@ public class McNairPoly
     {
     
         int[] dice = roll();
-        boolean isDouble = dice[1] == dice[2];
+        boolean isDouble = dice[0] == dice[1];
 
         if(isDouble)
         {

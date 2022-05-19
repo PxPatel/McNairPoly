@@ -7,8 +7,7 @@ public class Player
     private int GPA;
     private boolean isInGame;
     private ArrayList<Property> propertiesOwned;
-    // private int numOfPropertiesOwned;
-    
+
     private boolean inJail;
     private int daysInJail;
 
@@ -57,7 +56,7 @@ public class Player
         GPA -= 15;
     }
     
-    public void inDetention()
+    public void putInDetention()
     {
        if(!inJail)
        {

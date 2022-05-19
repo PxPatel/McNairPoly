@@ -131,7 +131,7 @@ public class Property extends Space
     @Override
     public String toString() 
     {
-        return "Property [name="  + super.getName() + ", cost=" + cost + "]";
+        return "Property [name="  + super.getName() + ", cost=" + cost + ", rent=" + rent + "]";
     } 
     
     
