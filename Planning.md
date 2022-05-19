@@ -6,6 +6,7 @@ McNairPoly
     private Scanner scan
     private playerAtTurn
     private Property[] board
+    private Player playerAtTurn
 
 
     Constructor
@@ -24,15 +25,21 @@ McNairPoly
         get the new position using modulus
         set the player's new position
 
+        <> passGo()
+
     <> isOwned()
         get currPos of the player at turn
         use isOwned getter method on the property at that position
-        e
 
     <> action()
         check if property landed is special or not
         buy()
         payrent()
+
+        if special
+            <> payTax()
+            <> inDetention()
+            <> inDoubleLunch()
 
     <> checkIfWinner()
 
@@ -48,7 +55,10 @@ Player
 
     <> bankrupt(Player obj)
     <> buy()
-    <> payRent()
+    <> payRent()            
+    <> payTax()
+    <> inDetention()
+    <> inDoubleLunch()
 
 Space
     Represents each space on the board

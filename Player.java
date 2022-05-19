@@ -9,8 +9,8 @@ public class Player
     private ArrayList<Property> propertiesOwned;
     // private int numOfPropertiesOwned;
     
-    private boolean isInJail;
-    privates int daysInJail;
+    private boolean inJail;
+    private int daysInJail;
 
     public Player(String name)
     {
@@ -19,7 +19,7 @@ public class Player
         GPA = 100;
         isInGame = true;
         propertiesOwned = new ArrayList<Property>();
-        isInJail = false;
+        inJail = false;
         daysInJail = 0;
     }
 
@@ -59,9 +59,9 @@ public class Player
     
     public void inDetention()
     {
-       if(!isInJail)
+       if(!inJail)
        {
-            isInJail = true;
+            inJail = true;
        }
     }
 
@@ -105,6 +105,26 @@ public class Player
     public void addProperty(Property prop) 
     {
         propertiesOwned.add(prop);
+    }
+
+    public boolean isInJail() 
+    {
+        return inJail;
+    }
+
+    public void setInJail(boolean inJail) 
+    {
+        this.inJail = inJail;
+    }
+
+    public int getDaysInJail() 
+    {
+        return daysInJail;
+    }
+
+    public void setDaysInJail(int daysInJail) 
+    {
+        this.daysInJail = daysInJail;
     }
 
     @Override

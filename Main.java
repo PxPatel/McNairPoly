@@ -2,22 +2,26 @@ class Main
 {
     public static void main(String[] args)
     {
-        McNairPoly game = new McNairPoly();
+        McNairPoly g = new McNairPoly();
+        
 
-        boolean winner = false;
-        /*
-        while(!winner)
-            game.move();
-            game.action();
-            flag = game.checkWinner();
-            game.nextTurn();
-        */
 
-        game.move();
-        game.action();
+        //Runs game while no winner
+        while(!g.checkIfWinner())
+        {
+            if(!g.isPlayerInJail())
+            {
+                g.move();
+                g.action();
+                g.nextTurn();
+            }
 
-        Player p = game.getPlayers()[0];
-        System.out.println(p);
+            else
+            {
+                g.inJailAction();
+                g.nextTurn();
+            }
+        }
 
     }
 }

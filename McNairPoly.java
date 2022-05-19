@@ -8,6 +8,7 @@ public class McNairPoly
     private int turn;
     private Property[] board;
     private final int BOARD_SIZE = 22;
+    private Player playerAtTurn;
 
 
     public McNairPoly()
@@ -41,31 +42,48 @@ public class McNairPoly
         {
             board[i] = new Property(i);
         }
+
+        playerAtTurn = players[0];
     }
 
-    private int roll()
+    public int[] roll()
     {
         int a = (int)(Math.random() * 12) + 1;
         int b = (int)(Math.random() * 12) + 1;
-        return a + b;
+        int[] total = {a,b};
+
+        System.out.println(playerAtTurn.getName() + " rolled a [" + a + "] [" + b + "]");
+
+        return total;
     }
 
     public void move()
     {
-        int roll = roll();
-        int currPos = players[turn].getPos();
+        int[] dice = roll();
+        int roll = dice[1] + dice[2];
+
+        int currPos = playerAtTurn.getPos();
         int newPos = (currPos + roll) % board.length;
-        players[turn].setPos(newPos);
+        playerAtTurn.setPos(newPos);
 
         if(currPos > newPos)
         {
-            players[turn].passGo();
+            playerAtTurn.passGo();
         }
+    }
+
+    public boolean isPlayerInJail()
+    {
+        if(playerAtTurn.isInJail())
+        {
+            return true;
+        }
+        return false;
     }
 
     public boolean isOwned()
     {
-        int currPos = players[turn].getPos();
+        int currPos = playerAtTurn.getPos();
         boolean ans = board[currPos].isOwned();
         return ans;
     }
@@ -77,7 +95,7 @@ public class McNairPoly
         if(landed.isSpecial())
         {
        
-            if(landed.isTax)
+            if(landed.isTax())
             {
                 mainPlayer.payTax();
             }
@@ -117,6 +135,19 @@ public class McNairPoly
         }
     }
 
+    public void inJailAction()
+    {
+    
+        int[] dice = roll();
+        boolean isDouble = dice[1] == dice[2];
+
+        if(isDouble)
+        {
+            playerAtTurn.setInJail(false);
+        }
+        
+    }
+
     public boolean checkIfWinner()
     {
         for(Player p : players)
@@ -139,11 +170,12 @@ public class McNairPoly
             if(players[temp].isInGame())
             {
                 turn = (turn + 1) % numUsers;
+                playerAtTurn = players[turn];
                 break;
             }
             else
             {
-                temp = (turn + 1) % numUsers;
+                temp = (temp + 1) % numUsers;
             }
         }
     }
