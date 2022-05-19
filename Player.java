@@ -8,6 +8,9 @@ public class Player
     private boolean isInGame;
     private ArrayList<Property> propertiesOwned;
     // private int numOfPropertiesOwned;
+    
+    private boolean isInJail;
+    privates int daysInJail;
 
     public Player(String name)
     {
@@ -16,6 +19,8 @@ public class Player
         GPA = 100;
         isInGame = true;
         propertiesOwned = new ArrayList<Property>();
+        isInJail = false;
+        daysInJail = 0;
     }
 
     public void bankrupt(Player obj)
@@ -27,6 +32,11 @@ public class Player
         {
             obj.addProperty(prop);
         }
+    }
+    
+    public void passGo()
+    {
+        GPA += 25;
     }
 
     public void buy(Property prop)
@@ -40,6 +50,19 @@ public class Player
         Player propOwner = prop.getOwner();
         propOwner.addGPA(prop.getCost());
         this.GPA -= prop.getCost();
+    }
+    
+    public void payTax()
+    {
+        GPA -= 15;
+    }
+    
+    public void inDetention()
+    {
+       if(!isInJail)
+       {
+            isInJail = true;
+       }
     }
 
     public String getName() {
