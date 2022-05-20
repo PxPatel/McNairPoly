@@ -20,6 +20,5 @@ class Main
                 g.nextTurn();
             }
         }
-
-    }
+   }
 }

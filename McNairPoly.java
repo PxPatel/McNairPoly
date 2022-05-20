@@ -21,8 +21,8 @@ public class McNairPoly
         int num = 100;
         while(num <= 1 || num > 6)
         {
-            System.out.print("How many people are playing (1-6)? ");
-            num = scan.nextInt();
+            System.out.print("How many people are playing (> 1 and < 7)? ");
+            num = scan.nextInt(); 
         }
 
         //To consume the empty line and not cause errors regarding the Scanner class
@@ -33,7 +33,7 @@ public class McNairPoly
          // Asks for player names and assigns them
 		for (int i = 0; i < numUsers; i++) 
         {
-			System.out.print("What is player " + (i + 1) + "'s name? ");
+			System.out.print("What is Player " + (i + 1) + "'s name? ");
 			String name = scan.nextLine();
 			players[i] = new Player(name);
 		}
@@ -53,7 +53,7 @@ public class McNairPoly
         board[2] = new Property("Mythology", 2, 7, 0);
         board[3] = new Property("Small Tax - Forgot HW", 3, true, false, false, false);
         board[4] = new Property("French 1", 4, 10, 0);
-        board[5] = new Property("Sexually Harrased", 5, false, false, true, false);
+        board[5] = new Property("Big Tax - Dress Coded", 5, true, false, false, false);
 
         board[6] = new Property("Driver\'s Ed", 6, 13, 0);
         board[7] = new Property("Lit 3", 7, 16, 0);
@@ -85,16 +85,28 @@ public class McNairPoly
         }
     }
 
+    private void sleep(int time)
+    {
+        try
+        {
+            Thread.sleep(time);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     private int[] roll()
     {
         int a = (int)(Math.random() * 6) + 1;
         int b = (int)(Math.random() * 6) + 1;
         int[] total = {a,b};
-        System.out.println("[Rolling...]");
+        System.out.print("[Rolling...] ==> ");
 
         sleep();
 
-        System.out.println(playerAtTurn.getName() + " rolled a [" + a + "] [" + b + "]");
+        System.out.print(playerAtTurn.getName() + " rolled a [" + a + "] [" + b + "]");
 
         return total;
     }
@@ -106,6 +118,7 @@ public class McNairPoly
 
         int[] dice = roll();
         int roll = dice[0] + dice[1];
+        System.out.println(" ==> " + roll);
 
         int currPos = playerAtTurn.getPos();
         int newPos = (currPos + roll) % board.length;
@@ -115,7 +128,7 @@ public class McNairPoly
         {
             playerAtTurn.passGo();
         }
-
+        sleep();
         System.out.println("\n" + playerAtTurn.getName() + " landed on " + board[newPos]);
     }
 
@@ -132,6 +145,7 @@ public class McNairPoly
     {
         Player mainPlayer = players[turn]; 
         Property landed = board[mainPlayer.getPos()];
+        sleep(2000);
         if(landed.isSpecial())
         {
        
@@ -146,6 +160,7 @@ public class McNairPoly
             else if(landed.isDetention())
             {
                 mainPlayer.putInDetention();
+                sleep();
                 System.out.println("\n[DETENTION] OH NO! You are now in Detention!");
             }
             
@@ -154,16 +169,18 @@ public class McNairPoly
         {
             while(true)
             {
-                System.out.print("\nWould you like to buy " + landed.getName() + "? (Y/N) ");
+                System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N) ");
                 String choice = scan.nextLine().toUpperCase();
                 if(choice.equals("Y") && playerAtTurn.getGPA() >= landed.getCost())
                 {
                     players[turn].buy(landed);
-                    System.out.println("\n[BOUGHT]" + mainPlayer.getName() + " just bought " + landed.getName() + "!");
+                    sleep();
+                    System.out.println("\n[BOUGHT] " + mainPlayer.getName() + " just bought " + landed.getName() + "!");
                     break;
                 }
                 else if(choice.equals("Y"))
                 {
+                    sleep();
                     System.out.println("\nSorry, you don't have enough GPA to buy " + landed.getName());
                     break;
                 }
@@ -178,11 +195,13 @@ public class McNairPoly
             if(players[turn].getGPA() >= landed.getRent())
             {
                 players[turn].payRent(landed);
-                System.out.println("\n[RENT]" + mainPlayer.getName() + " has payed $" + landed.getRent() + " to " + landed.getOwner().getName());
+                sleep();
+                System.out.println("\n[RENT] " + mainPlayer.getName() + " has payed $" + landed.getRent() + " to " + landed.getOwner().getName());
             }
             else
             {
                 players[turn].bankrupt(landed.getOwner());
+                sleep();
                 System.out.println(mainPlayer.getName() + " is BANKRUPT!");
             }
         }
@@ -200,17 +219,20 @@ public class McNairPoly
         {
             playerAtTurn.setInJail(false);
             playerAtTurn.setDaysInJail(0);
-            System.out.println("\n[FREEDOM] You rolled a double and are now out of Detention!");
+            sleep();
+            System.out.println("\n\n[FREEDOM] You rolled a double and are now out of Detention!");
         }
         else if(playerAtTurn.getDaysInJail() == 2)
         {
             playerAtTurn.setInJail(false);
             playerAtTurn.setDaysInJail(0);
-            System.out.println("\n[FREEDOM] You spent 2 days and are now out of Detention!");
+            sleep();
+            System.out.println("\n\n[FREEDOM] You spent 2 days and are now out of Detention!");
         }
         else
         {
             playerAtTurn.setDaysInJail(playerAtTurn.getDaysInJail() + 1);
+            sleep();
         }
         
     }
@@ -230,6 +252,7 @@ public class McNairPoly
 
     public void nextTurn()
     {
+        sleep();
         int temp = (turn + 1) % numUsers;
 
         while(true)
@@ -252,5 +275,13 @@ public class McNairPoly
     public Player[] getPlayers()
     {
         return players;
+    }
+
+    public void getBoard()
+    {
+        for(Property i : board)
+        {
+            System.out.println(i);
+        }
     }
 }

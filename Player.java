@@ -44,6 +44,7 @@ public class Player
     {
         propertiesOwned.add(prop);
         prop.setOwner(this);
+        prop.setOwned(true);
     }
 
     public void payRent(Property prop)

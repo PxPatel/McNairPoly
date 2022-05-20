@@ -24,7 +24,7 @@ public class Property extends Space
         this.isDetention = isDetention;
         this.isStudying = isStudying;
         
-        if(isTax && name.indexOf("Small Tax") != 0)
+        if(isTax && name.indexOf("Small Tax") != -1)
         {
             tax = 15;
         }
@@ -129,19 +129,19 @@ public class Property extends Space
     {
         if(!isSpecial && isOwned)
         {
-            return "Property [Name = "  + super.getName() + ", Owner = " + owner + ", Rent = " + rent + "]";
+            return super.getName() + " [Owner = " + owner + ", Rent = " + rent + "]";
         }
-        else if(!isSpecial && !isOwned)
+        else if(!isSpecial)
         {
-            return "Property [Name = "  + super.getName() + ", Cost = " + cost + ", Rent = " + rent + "]";
+            return super.getName() + " [Cost = " + cost + ", Rent = " + rent + "]";
         }
         else if(isSpecial && isTax)
         {
-            return "Property [Name = "  + super.getName() + ", Tax = " + tax + "]";
+            return super.getName() + " [Tax = " + tax + "]";
         }
         else 
         {
-            return "Property [Nam e= "  + super.getName() + "]";
+            return super.getName();
         }
     } 
 }
