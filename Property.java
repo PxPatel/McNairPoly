@@ -7,7 +7,6 @@ public class Property extends Space
     private boolean isDetention;
     private boolean isStudying;
 
-
     private int cost;
     private boolean isOwned;
     private Player owner;
@@ -38,7 +37,6 @@ public class Property extends Space
         this.isDoubleLunch = isDoubleLunch;
         this.isDetention = isDetention;
         this.isStudying = isStudying;
-        
         
         cost = -1;
         isOwned = false;
@@ -131,7 +129,7 @@ public class Property extends Space
     @Override
     public String toString() 
     {
-        return "Property [name="  + super.getName() + ", cost=" + cost + ", rent=" + rent + "]";
+        return "Property [name= "  + super.getName() + ", cost= " + cost + ", rent= " + rent + "]";
     } 
     
     

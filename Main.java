@@ -4,8 +4,6 @@ class Main
     {
         McNairPoly g = new McNairPoly();
         
-
-
         //Runs game while no winner
         while(!g.checkIfWinner())
         {
