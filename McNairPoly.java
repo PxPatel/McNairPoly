@@ -1,6 +1,5 @@
 import java.util.Scanner;
 
-
 public class McNairPoly
 {
     private Player[] players;
@@ -13,15 +12,14 @@ public class McNairPoly
     private Property[] board;
     private final int BOARD_SIZE = 20; //6 x 6 board
 
-    private final int oneSecond = 1000; 
-    private final int halfSecond = 500;
+    private final int waitTimer = 750; 
 
     public McNairPoly()
     {
         turn = 0;
 
         int num = 100;
-        while(num < 0 || num > 6)
+        while(num <= 1 || num > 6)
         {
             System.out.print("How many people are playing (1-6)? ");
             num = scan.nextInt();
@@ -79,7 +77,7 @@ public class McNairPoly
     {
         try
         {
-            Thread.sleep(oneSecond);
+            Thread.sleep(waitTimer);
         }
         catch(InterruptedException ex)
         {
@@ -139,7 +137,7 @@ public class McNairPoly
        
             if(landed.isTax())
             {
-                mainPlayer.payTax();
+                mainPlayer.payTax(landed);
             }
             // else if(landed.isDoubleLunch)
             // {
@@ -148,21 +146,31 @@ public class McNairPoly
             else if(landed.isDetention())
             {
                 mainPlayer.putInDetention();
+                System.out.println("\n[DETENTION] OH NO! You are now in Detention!");
             }
             
         }
         else if(!landed.isOwned())
         {
-            System.out.print("Would you like to buy " + landed.getName() + "? (Y/N) ");
-            String choice = scan.nextLine().toUpperCase();
-            if(choice.equals("Y") && playerAtTurn.getGPA() >= landed.getCost())
+            while(true)
             {
-                players[turn].buy(landed);
-                System.out.println(mainPlayer.getName() + " just bought " + landed.getName() + "!");
-            }
-            else if(choice.equals("Y"))
-            {
-                System.out.println("Sorry, you don't have enough GPA to buy " + landed.getName());
+                System.out.print("\nWould you like to buy " + landed.getName() + "? (Y/N) ");
+                String choice = scan.nextLine().toUpperCase();
+                if(choice.equals("Y") && playerAtTurn.getGPA() >= landed.getCost())
+                {
+                    players[turn].buy(landed);
+                    System.out.println("\n[BOUGHT]" + mainPlayer.getName() + " just bought " + landed.getName() + "!");
+                    break;
+                }
+                else if(choice.equals("Y"))
+                {
+                    System.out.println("\nSorry, you don't have enough GPA to buy " + landed.getName());
+                    break;
+                }
+                else if(choice.equals("N"))
+                {
+                    break;
+                }
             }
         }
         else if(landed.isOwned())
@@ -170,7 +178,7 @@ public class McNairPoly
             if(players[turn].getGPA() >= landed.getRent())
             {
                 players[turn].payRent(landed);
-                System.out.println(mainPlayer.getName() + " has payed $" + landed.getRent() + " to " + landed.getOwner().getName());
+                System.out.println("\n[RENT]" + mainPlayer.getName() + " has payed $" + landed.getRent() + " to " + landed.getOwner().getName());
             }
             else
             {
@@ -182,6 +190,8 @@ public class McNairPoly
 
     public void inJailAction()
     {
+        System.out.println("\n[New Turn] " + playerAtTurn.getName() + ", would you like to roll? [ENTER TO CONTINUE]");
+        scan.nextLine();
     
         int[] dice = roll();
         boolean isDouble = dice[0] == dice[1];
@@ -189,6 +199,18 @@ public class McNairPoly
         if(isDouble)
         {
             playerAtTurn.setInJail(false);
+            playerAtTurn.setDaysInJail(0);
+            System.out.println("\n[FREEDOM] You rolled a double and are now out of Detention!");
+        }
+        else if(playerAtTurn.getDaysInJail() == 2)
+        {
+            playerAtTurn.setInJail(false);
+            playerAtTurn.setDaysInJail(0);
+            System.out.println("\n[FREEDOM] You spent 2 days and are now out of Detention!");
+        }
+        else
+        {
+            playerAtTurn.setDaysInJail(playerAtTurn.getDaysInJail() + 1);
         }
         
     }
@@ -197,7 +219,7 @@ public class McNairPoly
     {
         for(Player p : players)
         {
-            if(p.isInGame() && p.getGPA() > 1000)
+            if(p.getIsInGame() && p.getGPA() >= 375 )
             {
                 return true;
             }
@@ -212,9 +234,9 @@ public class McNairPoly
 
         while(true)
         {
-            if(players[temp].isInGame())
+            if(players[temp].getIsInGame())
             {
-                turn = (turn + 1) % numUsers;
+                turn = temp;
                 playerAtTurn = players[turn];
                 break;
             }
@@ -223,6 +245,8 @@ public class McNairPoly
                 temp = (temp + 1) % numUsers;
             }
         }
+
+        System.out.println("\n------------------------------------------------------");
     }
     
     public Player[] getPlayers()

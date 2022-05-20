@@ -7,26 +7,12 @@ public class Property extends Space
     private boolean isDetention;
     private boolean isStudying;
 
+    private int tax;
+
     private int cost;
     private boolean isOwned;
     private Player owner;
     private int rent;
-
-
-    public Property(int loc)
-    {
-        super("Blank", loc);
-        isSpecial = false;
-        isTax = false;
-        isDoubleLunch = false;
-        isDetention = false;
-        isStudying = false;
-
-        cost = 1;
-        isOwned = false;
-        owner = null;
-        rent = 2;
-    }
     
     //A special space constructor
     public Property(String name, int loc, boolean isTax, boolean isDoubleLunch, boolean isDetention, boolean isStudying)
@@ -38,6 +24,15 @@ public class Property extends Space
         this.isDetention = isDetention;
         this.isStudying = isStudying;
         
+        if(isTax && name.indexOf("Small Tax") != 0)
+        {
+            tax = 15;
+        }
+        else if(isTax)
+        {
+            tax = 25;
+        }
+
         cost = -1;
         isOwned = false;
         owner = null;
@@ -58,7 +53,6 @@ public class Property extends Space
         isOwned = false;
         owner = null;
         this.rent = rent;
-        
     }
 
     public int getCost() 
@@ -126,11 +120,28 @@ public class Property extends Space
         return isStudying;
     }
 
-    @Override
+    public int getTax()
+    {
+        return tax;
+    }
+
     public String toString() 
     {
-        return "Property [name= "  + super.getName() + ", cost= " + cost + ", rent= " + rent + "]";
+        if(!isSpecial && isOwned)
+        {
+            return "Property [Name = "  + super.getName() + ", Owner = " + owner + ", Rent = " + rent + "]";
+        }
+        else if(!isSpecial && !isOwned)
+        {
+            return "Property [Name = "  + super.getName() + ", Cost = " + cost + ", Rent = " + rent + "]";
+        }
+        else if(isSpecial && isTax)
+        {
+            return "Property [Name = "  + super.getName() + ", Tax = " + tax + "]";
+        }
+        else 
+        {
+            return "Property [Nam e= "  + super.getName() + "]";
+        }
     } 
-    
-    
 }

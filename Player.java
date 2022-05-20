@@ -24,11 +24,12 @@ public class Player
 
     public void bankrupt(Player obj)
     {
-        this.isInGame = false;
+        isInGame = false;
 
         obj.addGPA(GPA);
         for(Property prop : propertiesOwned)
         {
+            prop.setOwner(obj);
             obj.addProperty(prop);
         }
     }
@@ -36,6 +37,7 @@ public class Player
     public void passGo()
     {
         GPA += 25;
+        System.out.println("\n[GO] You passed go and collected 25 GPA");
     }
 
     public void buy(Property prop)
@@ -51,9 +53,9 @@ public class Player
         this.GPA -= prop.getCost();
     }
     
-    public void payTax()
+    public void payTax(Property prop)
     {
-        GPA -= 15;
+        GPA -= prop.getTax();
     }
     
     public void putInDetention()
@@ -88,7 +90,7 @@ public class Player
         this.GPA += GPA;
     }
 
-    public boolean isInGame() {
+    public boolean getIsInGame() {
         return isInGame;
     }
 
