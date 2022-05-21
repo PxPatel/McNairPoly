@@ -1,7 +1,5 @@
 public class Property extends Space
 {
-
-    private boolean isSpecial;
     private boolean isTax;
     private boolean isDoubleLunch;
     private boolean isDetention;
@@ -17,8 +15,7 @@ public class Property extends Space
     //A special space constructor
     public Property(String name, int loc, boolean isTax, boolean isDoubleLunch, boolean isDetention, boolean isStudying)
     {
-        super(name, loc);
-        this.isSpecial = true;
+        super(name, loc, true);
         this.isTax = isTax;
         this.isDoubleLunch = isDoubleLunch;
         this.isDetention = isDetention;
@@ -42,8 +39,7 @@ public class Property extends Space
     //A classroom space constructor
     public Property(String name, int loc, int cost, int rent)
     {
-        super(name, loc);
-        isSpecial = false;
+        super(name, loc, false);
         isTax = false;
         isDoubleLunch = false;
         isDetention = false;
@@ -73,11 +69,6 @@ public class Property extends Space
     public void setOwned(boolean isOwned) 
     {
         this.isOwned = isOwned;
-    }
-
-    public boolean isSpecial() 
-    {
-        return isSpecial;
     }
 
     public Player getOwner() 
@@ -127,15 +118,15 @@ public class Property extends Space
 
     public String toString() 
     {
-        if(!isSpecial && isOwned)
+        if(!super.isSpecial() && isOwned)
         {
             return super.getName() + " [Owner = " + owner + ", Rent = " + rent + "]";
         }
-        else if(!isSpecial)
+        else if(!super.isSpecial())
         {
             return super.getName() + " [Cost = " + cost + ", Rent = " + rent + "]";
         }
-        else if(isSpecial && isTax)
+        else if(super.isSpecial() && isTax)
         {
             return super.getName() + " [Tax = " + tax + "]";
         }
