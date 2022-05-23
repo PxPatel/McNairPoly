@@ -47,11 +47,12 @@ public class Property extends Card
         this.rent = rent;
     }
 
+    @Override
     public String toString()
     {
         if(isOwned)
         {
-            return super.getName() + " [Owner = " + owner + ", Rent = " + rent + "]";
+            return super.getName() + " [Owner = " + owner.getName() + ", Rent = " + rent + "]";
         }
         else
         {

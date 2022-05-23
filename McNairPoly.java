@@ -49,28 +49,28 @@ public class McNairPoly
         board = new Card[BOARD_SIZE];
 
         board[0] = new Special("Go", 0, false, false, false, true);
-        board[1] = new Property("Gym", 1, 5, 0);
-        board[2] = new Property("Mythology", 2, 7, 0);
+        board[1] = new Property("Gym", 1, 5, 3);
+        board[2] = new Property("Mythology", 2, 7, 4);
         board[3] = new Special("Small Tax - Forgot HW", 3, true, false, false, false);
-        board[4] = new Property("French 1", 4, 10, 0);
+        board[4] = new Property("French 1", 4, 10, 5);
         board[5] = new Special("Big Tax - Dress Coded", 5, true, false, false, false);
 
-        board[6] = new Property("Driver\'s Ed", 6, 13, 0);
-        board[7] = new Property("Lit 3", 7, 16, 0);
-        board[8] = new Property("Chem Honors", 8, 18, 0);
-        board[9] = new Property("AP Environmental Science", 8, 20, 0);
+        board[6] = new Property("Driver\'s Ed", 6, 13, 7);
+        board[7] = new Property("Lit 3", 7, 16, 8);
+        board[8] = new Property("Chem Honors", 8, 18, 9);
+        board[9] = new Property("AP Environmental Science", 8, 20, 10);
 
         board[10] = new Special("Detention", 9, false, false, true, false);
-        board[11] = new Property("AP Lit", 10, 30, 0);
+        board[11] = new Property("AP Lit", 10, 30, 15);
         board[12] = new Special("Small Tax - Forgot Project", 11, true, false, false, false);
-        board[13] = new Property("AP USH", 12, 35, 0);
-        board[14] = new Property("AP Calc AB", 13, 37, 0);
+        board[13] = new Property("AP USH", 12, 35, 18);
+        board[14] = new Property("AP Calc AB", 13, 37, 19);
         board[15] = new Special("Double Lunch", 14, false, true, false, false);
         
         board[16] = new Special("Small Tax - Late to Class", 16, true, false, false, false);
-        board[17] = new Property("AP Physics 1", 17, 56, 0);
-        board[18] = new Property("AP Chem", 18, 64, 0);
-        board[19] = new Property("AP Calc BC", 19, 70, 0); 
+        board[17] = new Property("AP Physics 1", 17, 56, 28);
+        board[18] = new Property("AP Chem", 18, 64, 32);
+        board[19] = new Property("AP Calc BC", 19, 70, 35); 
     }
 
     private void sleep()
@@ -78,18 +78,6 @@ public class McNairPoly
         try
         {
             Thread.sleep(waitTimer);
-        }
-        catch(InterruptedException ex)
-        {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    private void sleep(int time)
-    {
-        try
-        {
-            Thread.sleep(time);
         }
         catch(InterruptedException ex)
         {
@@ -123,6 +111,8 @@ public class McNairPoly
         int currPos = playerAtTurn.getPos();
         int newPos = (currPos + roll) % board.length;
         playerAtTurn.setPos(newPos);
+        
+        playerAtTurn.setCurrent(board[newPos]);
 
         if(currPos > newPos)
         {
@@ -140,19 +130,38 @@ public class McNairPoly
         }
         return false;
     }
+    
+    public void returnProperties(Card landed)
+    {
+        System.out.println("Type 'p' to return a list of your owned properties. Press 'enter' to continue.");
+        String ans = scan.nextLine();
+        
+        if(ans.equals("p"))
+        {
+            
+            for(Property prop : playerAtTurn.getPropertiesOwned())
+            {
+                System.out.println();
+             System.out.println(prop);   
+                
+            }
+            
+            System.out.println("it works!");
+        }
+    }
 
     public void action()
     {
-        Player mainPlayer = players[turn]; 
-        Card landed = board[mainPlayer.getPos()];
+        Card landed = board[playerAtTurn.getPos()];
 
-        sleep(2000);
+        
+        sleep();
         if(landed.isSpecial())
         {
        
             if(((Special) landed).isTax())
             {
-                mainPlayer.payTax(landed);
+                playerAtTurn.payTax(landed);
             }
             // else if(landed.isDoubleLunch)
             // {
@@ -160,7 +169,7 @@ public class McNairPoly
             // }
             else if(((Special) landed).isDetention())
             {
-                mainPlayer.putInDetention();
+                playerAtTurn.putInDetention();
                 sleep();
                 System.out.println("\n[DETENTION] OH NO! You are now in Detention!");
             }
@@ -170,13 +179,16 @@ public class McNairPoly
         {
             while(true)
             {
-                System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N) ");
+                System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N)");
                 String choice = scan.nextLine().toUpperCase();
                 if(choice.equals("Y") && playerAtTurn.getGPA() >= ((Property) landed).getCost())
                 {
                     players[turn].buy(landed);
                     sleep();
-                    System.out.println("\n[BOUGHT] " + mainPlayer.getName() + " just bought " + landed.getName() + "!");
+                    
+                    // returnProperties(landed);
+                    
+                    System.out.println("\n[BOUGHT] " + playerAtTurn.getName() + " just bought " + landed.getName() + "!");
                     break;
                 }
                 else if(choice.equals("Y"))
@@ -189,21 +201,23 @@ public class McNairPoly
                 {
                     break;
                 }
+                
             }
+            
         }
         else if(((Property) landed).getIsOwned())
         {
-            if(players[turn].getGPA() >= ((Property) landed).getRent())
+            if(playerAtTurn.getGPA() >= ((Property) landed).getRent())
             {
-                players[turn].payRent(landed);
+                playerAtTurn.payRent(landed);
                 sleep();
-                System.out.println("\n[RENT] " + mainPlayer.getName() + " has payed $" + ((Property) landed).getRent() + " to " + ((Property) landed).getOwner().getName());
+                System.out.println("\n[RENT] " + playerAtTurn.getName() + " has payed $" + ((Property) landed).getRent() + " to " + ((Property) landed).getOwner().getName());
             }
             else
             {
-                players[turn].bankrupt(((Property) landed).getOwner());
+                playerAtTurn.bankrupt(((Property) landed).getOwner());
                 sleep();
-                System.out.println(mainPlayer.getName() + " is BANKRUPT!");
+                System.out.println(playerAtTurn.getName() + " is BANKRUPT!");
             }
         }
     }
@@ -240,15 +254,38 @@ public class McNairPoly
 
     public boolean checkIfWinner()
     {
+        boolean winnerByGPA = false;
+        int numPlayersInGame = 0;
+
         for(Player p : players)
         {
-            if(p.getIsInGame() && p.getGPA() >= 375 )
+            if(p.getIsInGame())
             {
-                return true;
+                numPlayersInGame++;
+                if(p.getGPA() >= 375)
+                {
+                    winnerByGPA = true;
+                }
             }
         }
-
-        return false;
+        return winnerByGPA || numPlayersInGame == 1;
+    }
+    
+    
+    private void checkGlobalStats()
+    {
+        String contain = "";
+        for(Player user : players)
+        {
+            contain += user.toString() + "\n";
+        }
+        
+        System.out.println(contain);
+    }
+    
+    private void checkPlayerStats()
+    {
+        System.out.println(playerAtTurn.toString());
     }
 
     public void nextTurn()
@@ -269,7 +306,10 @@ public class McNairPoly
                 temp = (temp + 1) % numUsers;
             }
         }
+    }
 
+    public void divider()
+    {
         System.out.println("\n------------------------------------------------------");
     }
     
@@ -283,6 +323,41 @@ public class McNairPoly
         for(Card i : board)
         {
             System.out.println(i);
+        }
+    }
+
+
+    public void choices()
+    {
+        System.out.println(
+        "\n" + playerAtTurn.getName() + ", choose what you would like to do: \n1) Roll and Move\n\n2) Check your Stats\n\n3) Check all players' Stats\n\n4) Quit Game");
+        
+        while(true)
+        {
+            System.out.print("\nEnter choice : ");
+            String ans = scan.nextLine();
+
+            if(ans.equals("2"))
+            {
+                this.checkPlayerStats(); 
+            }
+
+            else if(ans.equals("3"))
+            {
+                this.checkGlobalStats();
+            }
+
+            else if(ans.equals("4"))
+            {
+                playerAtTurn.setInGame(false);
+                System.out.println("\n " + playerAtTurn.getName() + " has QUIT the game :(");
+                this.divider();
+                this.nextTurn();
+            }
+            else if(ans.equals("1"))
+            {
+                break;
+            }
         }
     }
 }

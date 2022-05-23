@@ -1,23 +1,27 @@
 import java.util.ArrayList;
 
-public class Player 
+public class Player
 {
     private String name;
     private int pos;
     private int GPA;
     private boolean isInGame;
     private ArrayList<Property> propertiesOwned;
+    private Card current; 
 
     private boolean inJail;
     private int daysInJail;
 
     public Player(String name)
     {
-        this.name = name;
+        this.name = name.toUpperCase();
         pos = 0;
         GPA = 100;
         isInGame = true;
         propertiesOwned = new ArrayList<Property>();
+        current = new Special("Go", 0, false, false, false, true);
+
+        
         inJail = false;
         daysInJail = 0;
     }
@@ -46,6 +50,7 @@ public class Player
         propertiesOwned.add((Property) prop);
         ((Property) prop).setOwner(this);
         ((Property) prop).setOwned(true);
+        GPA -= ((Property) prop).getCost();
     }
 
     public void payRent(Card prop)
@@ -92,6 +97,11 @@ public class Player
         this.GPA += GPA;
     }
 
+    public void setGPA(int gPA) 
+    {
+        GPA = gPA;
+    }
+
     public boolean getIsInGame() {
         return isInGame;
     }
@@ -104,10 +114,25 @@ public class Player
     {
         return propertiesOwned;
     }
+    
+    public void setPropertiesOwned(ArrayList<Property> propertiesOwned) 
+    {
+        this.propertiesOwned = propertiesOwned;
+    }
 
     public void addProperty(Property prop) 
     {
         propertiesOwned.add(prop);
+    }
+    
+    public void setCurrent(Card card)
+    {
+        current = card;   
+    }
+    
+    public Card getCurrent()
+    {
+        return current;   
     }
 
     public boolean isInJail() 
@@ -130,12 +155,23 @@ public class Player
         this.daysInJail = daysInJail;
     }
 
+
+
     @Override
     public String toString() 
     {
         if(isInGame)
         {
-            return "Player [GPA=" + GPA + ", isInGame=" + isInGame + ", name=" + name + ", pos=" + pos + ", Properties: " + propertiesOwned + "]";
+            String propOwned = "";
+            
+            int i = 1;
+            for(Property prop : propertiesOwned)
+            {
+                propOwned += i + ") " + prop.getName() + " ";
+                i++;
+            }
+            
+            return "\n" + name + " - [GPA = " + GPA + ", Currently on = " + current.getName() + ", Properties: " + propOwned + "]";
         }
         else
         {

@@ -1,6 +1,5 @@
 public class Card
 {
-
     private String name;
     private int location;
     private boolean isSpecial;
@@ -10,7 +9,7 @@ public class Card
     {
         this.name = name;
         this.location = loc;
-        this.isSpecial = false;
+        this.isSpecial = isSpecial;
     }
 
     public String getName() {
