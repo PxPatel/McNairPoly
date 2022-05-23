@@ -9,7 +9,7 @@ public class McNairPoly
 
     private Scanner scan = new Scanner(System.in);
     
-    private Property[] board;
+    private Card[] board;
     private final int BOARD_SIZE = 20; //6 x 6 board
 
     private final int waitTimer = 750; 
@@ -46,28 +46,28 @@ public class McNairPoly
 
     public void initializeBoard()
     {
-        board = new Property[BOARD_SIZE];
+        board = new Card[BOARD_SIZE];
 
-        board[0] = new Property("Go", 0, false, false, false, true);
+        board[0] = new Special("Go", 0, false, false, false, true);
         board[1] = new Property("Gym", 1, 5, 0);
         board[2] = new Property("Mythology", 2, 7, 0);
-        board[3] = new Property("Small Tax - Forgot HW", 3, true, false, false, false);
+        board[3] = new Special("Small Tax - Forgot HW", 3, true, false, false, false);
         board[4] = new Property("French 1", 4, 10, 0);
-        board[5] = new Property("Big Tax - Dress Coded", 5, true, false, false, false);
+        board[5] = new Special("Big Tax - Dress Coded", 5, true, false, false, false);
 
         board[6] = new Property("Driver\'s Ed", 6, 13, 0);
         board[7] = new Property("Lit 3", 7, 16, 0);
         board[8] = new Property("Chem Honors", 8, 18, 0);
         board[9] = new Property("AP Environmental Science", 8, 20, 0);
 
-        board[10] = new Property("Detention", 9, false, false, true, false);
+        board[10] = new Special("Detention", 9, false, false, true, false);
         board[11] = new Property("AP Lit", 10, 30, 0);
-        board[12] = new Property("Small Tax - Forgot Project", 11, true, false, false, false);
+        board[12] = new Special("Small Tax - Forgot Project", 11, true, false, false, false);
         board[13] = new Property("AP USH", 12, 35, 0);
         board[14] = new Property("AP Calc AB", 13, 37, 0);
-        board[15] = new Property("Double Lunch", 14, false, true, false, false);
+        board[15] = new Special("Double Lunch", 14, false, true, false, false);
         
-        board[16] = new Property("Small Tax - Late to Class", 16, true, false, false, false);
+        board[16] = new Special("Small Tax - Late to Class", 16, true, false, false, false);
         board[17] = new Property("AP Physics 1", 17, 56, 0);
         board[18] = new Property("AP Chem", 18, 64, 0);
         board[19] = new Property("AP Calc BC", 19, 70, 0); 
@@ -144,12 +144,13 @@ public class McNairPoly
     public void action()
     {
         Player mainPlayer = players[turn]; 
-        Property landed = board[mainPlayer.getPos()];
+        Card landed = board[mainPlayer.getPos()];
+
         sleep(2000);
         if(landed.isSpecial())
         {
        
-            if(landed.isTax())
+            if(((Special) landed).isTax())
             {
                 mainPlayer.payTax(landed);
             }
@@ -157,7 +158,7 @@ public class McNairPoly
             // {
             //     mainPlayer.inDoubleLunch();
             // }
-            else if(landed.isDetention())
+            else if(((Special) landed).isDetention())
             {
                 mainPlayer.putInDetention();
                 sleep();
@@ -165,13 +166,13 @@ public class McNairPoly
             }
             
         }
-        else if(!landed.isOwned())
+        else if(!((Property) landed).getIsOwned())
         {
             while(true)
             {
                 System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N) ");
                 String choice = scan.nextLine().toUpperCase();
-                if(choice.equals("Y") && playerAtTurn.getGPA() >= landed.getCost())
+                if(choice.equals("Y") && playerAtTurn.getGPA() >= ((Property) landed).getCost())
                 {
                     players[turn].buy(landed);
                     sleep();
@@ -190,17 +191,17 @@ public class McNairPoly
                 }
             }
         }
-        else if(landed.isOwned())
+        else if(((Property) landed).getIsOwned())
         {
-            if(players[turn].getGPA() >= landed.getRent())
+            if(players[turn].getGPA() >= ((Property) landed).getRent())
             {
                 players[turn].payRent(landed);
                 sleep();
-                System.out.println("\n[RENT] " + mainPlayer.getName() + " has payed $" + landed.getRent() + " to " + landed.getOwner().getName());
+                System.out.println("\n[RENT] " + mainPlayer.getName() + " has payed $" + ((Property) landed).getRent() + " to " + ((Property) landed).getOwner().getName());
             }
             else
             {
-                players[turn].bankrupt(landed.getOwner());
+                players[turn].bankrupt(((Property) landed).getOwner());
                 sleep();
                 System.out.println(mainPlayer.getName() + " is BANKRUPT!");
             }
@@ -279,7 +280,7 @@ public class McNairPoly
 
     public void getBoard()
     {
-        for(Property i : board)
+        for(Card i : board)
         {
             System.out.println(i);
         }

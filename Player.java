@@ -27,10 +27,11 @@ public class Player
         isInGame = false;
 
         obj.addGPA(GPA);
-        for(Property prop : propertiesOwned)
+        for(Card prop : propertiesOwned)
         {
-            prop.setOwner(obj);
-            obj.addProperty(prop);
+            ((Property) prop).setOwner(obj);
+
+            obj.addProperty((Property) prop);
         }
     }
     
@@ -40,23 +41,23 @@ public class Player
         System.out.println("\n[GO] You passed go and collected 25 GPA");
     }
 
-    public void buy(Property prop)
+    public void buy(Card prop)
     {
-        propertiesOwned.add(prop);
-        prop.setOwner(this);
-        prop.setOwned(true);
+        propertiesOwned.add((Property) prop);
+        ((Property) prop).setOwner(this);
+        ((Property) prop).setOwned(true);
     }
 
-    public void payRent(Property prop)
+    public void payRent(Card prop)
     {
-        Player propOwner = prop.getOwner();
-        propOwner.addGPA(prop.getCost());
-        this.GPA -= prop.getCost();
+        Player propOwner = ((Property) prop).getOwner();
+        propOwner.addGPA(((Property)prop).getCost());
+        this.GPA -= ((Property)prop).getCost();
     }
     
-    public void payTax(Property prop)
+    public void payTax(Card prop)
     {
-        GPA -= prop.getTax();
+        GPA -= ((Special) prop).getTax();
     }
     
     public void putInDetention()
