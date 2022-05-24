@@ -160,14 +160,12 @@ public class McNairPoly
         {
             while(true)
             {
-                System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N)");
+                System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N) ");
                 String choice = scan.nextLine().toUpperCase();
                 if(choice.equals("Y") && playerAtTurn.getGPA() >= ((Property) landed).getCost())
                 {
                     players[turn].buy(landed);
                     sleep();
-                    
-                    // returnProperties(landed);
                     
                     System.out.println("\n[BOUGHT] " + playerAtTurn.getName() + " just bought " + landed.getName() + "!");
                     break;
@@ -175,7 +173,7 @@ public class McNairPoly
                 else if(choice.equals("Y"))
                 {
                     sleep();
-                    System.out.println("\nSorry, you don't have enough GPA to buy " + landed.getName());
+                    System.out.println("\n[NOT ENOUGH] Sorry, you don't have enough GPA to buy " + landed.getName());
                     break;
                 }
                 else if(choice.equals("N"))
