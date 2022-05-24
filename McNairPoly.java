@@ -130,25 +130,6 @@ public class McNairPoly
         }
         return false;
     }
-    
-    public void returnProperties(Card landed)
-    {
-        System.out.println("Type 'p' to return a list of your owned properties. Press 'enter' to continue.");
-        String ans = scan.nextLine();
-        
-        if(ans.equals("p"))
-        {
-            
-            for(Property prop : playerAtTurn.getPropertiesOwned())
-            {
-                System.out.println();
-             System.out.println(prop);   
-                
-            }
-            
-            System.out.println("it works!");
-        }
-    }
 
     public void action()
     {
