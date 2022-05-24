@@ -73,6 +73,17 @@ public class Player
        }
     }
 
+    public void tradeGPA(Player recipient, int amount)
+    {
+        
+        
+    }
+
+    public void tradeProperty(Player recipient, Card prop)
+    {
+        
+    }
+
     public String getName() {
         return name;
     }
@@ -154,8 +165,6 @@ public class Player
     {
         this.daysInJail = daysInJail;
     }
-
-
 
     @Override
     public String toString() 
