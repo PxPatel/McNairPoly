@@ -23,6 +23,7 @@ class Main
             {
                 g.inJailAction();
                 g.nextTurn();
+                g.divider();
             }
         }
    }
