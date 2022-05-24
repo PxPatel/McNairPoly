@@ -330,13 +330,12 @@ public class McNairPoly
     public void choices()
     {
         System.out.println(
-        "\n" + playerAtTurn.getName() + ", choose what you would like to do: \n1) Roll and Move\n\n2) Check your Stats\n\n3) Check all players' Stats\n\n4) Trade with another player\n\n5) Quit Game");
+        "\n" + playerAtTurn.getName() + ", choose what you would like to do: \n1) Roll and Move\n\n2) Check your Stats\n\n3) Check all players' Stats\n\n4) Quit Game");
         
         while(true)
         {
             System.out.print("\nEnter choice : ");
             String ans = scan.nextLine();
-
 
             if(ans.equals("1"))
             {
@@ -354,62 +353,6 @@ public class McNairPoly
             }
 
             else if(ans.equals("4"))
-            {
-                this.divider();
-
-                Player trading = null;
-
-                System.out.println("\nWho would you like to trade with? ");
-                
-                int i = 1;
-                for(Player player : players)
-                {
-                    if(i != turn)
-                    {
-                        System.out.println(i + ") " + player.getName());
-                        i++;
-                    }
-                }
-
-                boolean flag = true;
-                while(flag)
-                {
-                    System.out.print("Enter Player's number: ");
-                    String recipientName = scan.nextLine();
-
-
-                    for(Player player : players)
-                    {
-                        if(player.getName().indexOf(recipientName) != -1)
-                        {
-                            flag = false;
-                            trading = player;
-                        }
-                    }
-
-                }
-
-                while(true)
-                {
-                    System.out.print("What would you like to trade? GPA or Properties? ");
-                    String exchangeType = scan.nextLine().toUpperCase();
-
-                    if(exchangeType.equals("GPA"))
-                    {
-                        // playerAtTurn.tradeGPA(trading, amount);
-                        break;
-                    }
-                    else if(exchangeType.equals("PROPERTY"))
-                    {
-                        // playerAtTurn.tradeProperty(trading, prop);
-                        break;
-                    }
-                }
-
-
-            }
-
-            else if(ans.equals("5"))
             {
                 playerAtTurn.setInGame(false);
                 System.out.println("\n " + playerAtTurn.getName() + " has QUIT the game :(");
