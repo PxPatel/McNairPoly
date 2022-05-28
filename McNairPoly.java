@@ -73,10 +73,10 @@ public class McNairPoly
         board[17] = new Property("AP Physics 1", 17, 56, 28);
         board[18] = new Property("AP Chem", 18, 64, 32);
         board[19] = new Property("AP Calc BC", 19, 70, 35); 
-        board[20] = new Teleporter(1, 20);
-        board[21] = new Teleporter(2, 21);
-        board[22] = new Teleporter(3, 22);
-        board[23] = new Teleporter(4, 23);
+        board[20] = new Teleporter(20, 1);
+        board[21] = new Teleporter(21, 2);
+        board[22] = new Teleporter(22, 3);
+        board[23] = new Teleporter(23, 4);
         
     }
 
@@ -175,48 +175,72 @@ public class McNairPoly
           
           action();
         }
-          
-        else if(!((Property) landed).getIsOwned())
+
+        else if(landed.isChance())
         {
-            while(true)
+            String type = ((Chance) landed).getChanceType();
+
+            if(type.equals("GPA"))
             {
-                System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N) "); 
-                String choice = scan.nextLine().toUpperCase();
-                if(choice.equals("Y") && playerAtTurn.getGPA() >= ((Property) landed).getCost())
+                ((Chance) landed).chanceGPA(playerAtTurn);
+                if(playerAtTurn.getGPA() < 0)
                 {
-                    players[turn].buy(landed);
+                    playerAtTurn.bankruptToBank();
                     sleep();
+                    System.out.println(playerAtTurn.getName() + " is BANKRUPT!");
+                }
+
+            }
+            else if(type.equals("Property"))
+            {
+                ((Chance) landed).chanceProperty(playerAtTurn, board);
+            }
+        }
+        
+        else if(landed.isProperty())
+        {
+            if(!((Property) landed).getIsOwned())
+            {
+                while(true)
+                {
+                    System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N) "); 
+                    String choice = scan.nextLine().toUpperCase();
+                    if(choice.equals("Y") && playerAtTurn.getGPA() >= ((Property) landed).getCost())
+                    {
+                        players[turn].buy(landed);
+                        sleep();
+                        
+                        System.out.println("\n[BOUGHT] " + playerAtTurn.getName() + " just bought " + landed.getName() + "!");
+                        break;
+                    }
+                    else if(choice.equals("Y"))
+                    {
+                        sleep();
+                        System.out.println("\n[NOT ENOUGH] Sorry, you don't have enough GPA to buy " + landed.getName());
+                        break;
+                    }
+                    else if(choice.equals("N"))
+                    {
+                        break;
+                    }
                     
-                    System.out.println("\n[BOUGHT] " + playerAtTurn.getName() + " just bought " + landed.getName() + "!");
-                    break;
-                }
-                else if(choice.equals("Y"))
-                {
-                    sleep();
-                    System.out.println("\n[NOT ENOUGH] Sorry, you don't have enough GPA to buy " + landed.getName());
-                    break;
-                }
-                else if(choice.equals("N"))
-                {
-                    break;
                 }
                 
             }
-            
-        }
-        else if(((Property) landed).getIsOwned())
-        {
-            if(playerAtTurn.getGPA() >= ((Property) landed).getRent())
+            else if(((Property) landed).getIsOwned())
             {
-                playerAtTurn.payRent(landed);
-                sleep();
-                System.out.println("\n[RENT] " + playerAtTurn.getName() + " has payed $" + ((Property) landed).getRent() + " to " + ((Property) landed).getOwner().getName());
-            }
-            else
-            {
-                playerAtTurn.bankrupt(((Property) landed).getOwner());
-                sleep();
-                System.out.println(playerAtTurn.getName() + " is BANKRUPT!");
+                if(playerAtTurn.getGPA() > ((Property) landed).getRent())
+                {
+                    playerAtTurn.payRent(landed);
+                    sleep();
+                    System.out.println("\n[RENT] " + playerAtTurn.getName() + " has payed $" + ((Property) landed).getRent() + " to " + ((Property) landed).getOwner().getName());
+                }
+                else
+                {
+                    playerAtTurn.bankrupt(((Property) landed).getOwner());
+                    sleep();
+                    System.out.println(playerAtTurn.getName() + " is BANKRUPT!");
+                }
             }
         }
     }

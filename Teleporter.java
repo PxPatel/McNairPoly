@@ -3,9 +3,9 @@ public class Teleporter extends Card
     //howFar decides the range of how far the teleportation can possibly be
     private int howFar;
   
-    public Teleporter(int howFar, int loc)
+    public Teleporter(int loc, int howFar)
     {
-      super("//Took Wrong Stairwell\\\\", loc, false, true);
+      super("//Took Wrong Stairwell\\\\", loc, false, false, true, false);
 
       this.howFar = howFar;
     }

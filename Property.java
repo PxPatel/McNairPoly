@@ -7,7 +7,7 @@ public class Property extends Card
 
     public Property(String name, int loc, int cost, int rent)
     {
-        super(name, loc, false, false);
+        super(name, loc, true, false, false, false);
 
         this.cost = cost;
         isOwned = false;
@@ -27,7 +27,7 @@ public class Property extends Card
         return isOwned;
     }
 
-    public void setOwned(boolean isOwned) {
+    public void setIsOwned(boolean isOwned) {
         this.isOwned = isOwned;
     }
 

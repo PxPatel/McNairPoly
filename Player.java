@@ -37,6 +37,27 @@ public class Player
 
             obj.addProperty((Property) prop);
         }
+
+        for(int i = propertiesOwned.size(); i >= 0; i++)
+        {
+            propertiesOwned.remove(i);
+        }
+    }
+
+    public void bankruptToBank()
+    {
+        isInGame = false;
+
+        for(Card prop : propertiesOwned)
+        {
+            ((Property) prop).setIsOwned(false);
+            ((Property) prop).setOwner(null);
+        }
+        
+        for(int i = propertiesOwned.size(); i >= 0; i++)
+        {
+            propertiesOwned.remove(i);
+        }
     }
     
     public void passGo()
@@ -49,7 +70,7 @@ public class Player
     {
         propertiesOwned.add((Property) prop);
         ((Property) prop).setOwner(this);
-        ((Property) prop).setOwned(true);
+        ((Property) prop).setIsOwned(true);
         GPA -= ((Property) prop).getCost();
     }
 

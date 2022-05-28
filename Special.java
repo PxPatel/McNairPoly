@@ -9,7 +9,7 @@ public class Special extends Card
 
     public Special(String name, int loc, boolean isTax, boolean isDoubleLunch, boolean isDetention, boolean isGo)
     {
-        super(name, loc, true, false);
+        super(name, loc, false, true, false, false);
         
         this.isTax = isTax;
         this.isDoubleLunch = isDoubleLunch;
