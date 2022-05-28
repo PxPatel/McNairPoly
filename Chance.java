@@ -7,7 +7,7 @@ public class Chance extends Card
 
     public Chance(int loc, String chanceType)
     {
-        super(" ", loc, false, false, false, true);
+        super("Chance!", loc, false, false, false, true);
         this.chanceType = chanceType;
     }
 
@@ -80,6 +80,6 @@ public class Chance extends Card
 
     @Override
     public String toString() {
-        return "Chance [chanceType=" + chanceType + "]";
+        return super.getName();
     }
 }
