@@ -3,13 +3,15 @@ public class Card
     private String name;
     private int location;
     private boolean isSpecial;
+    private boolean isTeleporter;
 
     //A classroom space constructor
-    public Card(String name, int loc, boolean isSpecial)
+    public Card(String name, int loc, boolean isSpecial, boolean isTeleporter)
     {
         this.name = name;
         this.location = loc;
         this.isSpecial = isSpecial;
+        this.isTeleporter = isTeleporter;
     }
 
     public String getName() {
@@ -36,6 +38,14 @@ public class Card
         this.isSpecial = isSpecial;
     }
 
+    public boolean isTeleporter() {
+        return isTeleporter;
+    }
+
+    public void setTeleporter(boolean isTeleporter) {
+        this.isTeleporter = isTeleporter;
+    }
+  
     public String toString() 
     {
         return "Card [isSpecial=" + isSpecial + ", location=" + location + ", name=" + name + "]";

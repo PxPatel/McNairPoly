@@ -20,10 +20,10 @@ public class Player
         isInGame = true;
         propertiesOwned = new ArrayList<Property>();
         current = new Special("Go", 0, false, false, false, true);
-
         
         inJail = false;
         daysInJail = 0;
+
     }
 
     public void bankrupt(Player obj)
@@ -71,17 +71,6 @@ public class Player
        {
             inJail = true;
        }
-    }
-
-    public void tradeGPA(Player recipient, int amount)
-    {
-        
-        
-    }
-
-    public void tradeProperty(Player recipient, Card prop)
-    {
-        
     }
 
     public String getName() {

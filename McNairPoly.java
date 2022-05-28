@@ -6,11 +6,12 @@ public class McNairPoly
     private int numUsers;
     private int turn;
     private Player playerAtTurn;
-
+    private boolean gameOver;
+  
     private Scanner scan = new Scanner(System.in);
     
     private Card[] board;
-    private final int BOARD_SIZE = 20; //6 x 6 board
+    private final int BOARD_SIZE = 24; //6 x 6 board lies
 
     private final int waitTimer = 750; 
 
@@ -42,6 +43,7 @@ public class McNairPoly
         initializeBoard();
 
         playerAtTurn = players[0];
+        gameOver = false;
     }
 
     public void initializeBoard()
@@ -71,6 +73,11 @@ public class McNairPoly
         board[17] = new Property("AP Physics 1", 17, 56, 28);
         board[18] = new Property("AP Chem", 18, 64, 32);
         board[19] = new Property("AP Calc BC", 19, 70, 35); 
+        board[20] = new Teleporter(1, 20);
+        board[21] = new Teleporter(2, 21);
+        board[22] = new Teleporter(3, 22);
+        board[23] = new Teleporter(4, 23);
+        
     }
 
     private void sleep()
@@ -124,37 +131,17 @@ public class McNairPoly
 
     public boolean isPlayerInJail()
     {
-        if(playerAtTurn.isInJail())
+        if(playerAtTurn.getIsInGame() && playerAtTurn.isInJail()) //Change
         {
             return true;
         }
         return false;
     }
-    
-    public void returnProperties(Card landed)
-    {
-        System.out.println("Type 'p' to return a list of your owned properties. Press 'enter' to continue.");
-        String ans = scan.nextLine();
-        
-        if(ans.equals("p"))
-        {
-            
-            for(Property prop : playerAtTurn.getPropertiesOwned())
-            {
-                System.out.println();
-             System.out.println(prop);   
-                
-            }
-            
-            System.out.println("it works!");
-        }
-    }
-
+  
     public void action()
     {
         Card landed = board[playerAtTurn.getPos()];
-
-        
+ 
         sleep();
         if(landed.isSpecial())
         {
@@ -175,18 +162,30 @@ public class McNairPoly
             }
             
         }
+
+        else if(landed.isTeleporter())
+        {
+          int rawLoc = ((Teleporter) landed).teleport();
+          int refinedLoc = rawLoc % BOARD_SIZE;
+
+          playerAtTurn.setPos(refinedLoc);
+          playerAtTurn.setCurrent(board[refinedLoc]);
+
+          System.out.println("\n" + playerAtTurn.getName() + " will be teleported to " + board[refinedLoc].getName());
+          
+          action();
+        }
+          
         else if(!((Property) landed).getIsOwned())
         {
             while(true)
             {
-                System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N)");
+                System.out.print("\nWould you like to buy {" + landed.getName() + "}? (Y/N) "); 
                 String choice = scan.nextLine().toUpperCase();
                 if(choice.equals("Y") && playerAtTurn.getGPA() >= ((Property) landed).getCost())
                 {
                     players[turn].buy(landed);
                     sleep();
-                    
-                    // returnProperties(landed);
                     
                     System.out.println("\n[BOUGHT] " + playerAtTurn.getName() + " just bought " + landed.getName() + "!");
                     break;
@@ -194,7 +193,7 @@ public class McNairPoly
                 else if(choice.equals("Y"))
                 {
                     sleep();
-                    System.out.println("\nSorry, you don't have enough GPA to buy " + landed.getName());
+                    System.out.println("\n[NOT ENOUGH] Sorry, you don't have enough GPA to buy " + landed.getName());
                     break;
                 }
                 else if(choice.equals("N"))
@@ -326,17 +325,20 @@ public class McNairPoly
         }
     }
 
-
+    public boolean isGameOver() //Change
+    {
+    return gameOver;
+    }
+  
     public void choices()
     {
         System.out.println(
-        "\n" + playerAtTurn.getName() + ", choose what you would like to do: \n1) Roll and Move\n\n2) Check your Stats\n\n3) Check all players' Stats\n\n4) Trade with another player\n\n5) Quit Game");
+        "\n" + playerAtTurn.getName() + ", choose what you would like to do: \n1) Roll and Move\n\n2) Check your Stats\n\n3) Check all players' Stats\n\n4) Quit Game");
         
         while(true)
         {
             System.out.print("\nEnter choice : ");
             String ans = scan.nextLine();
-
 
             if(ans.equals("1"))
             {
@@ -355,66 +357,8 @@ public class McNairPoly
 
             else if(ans.equals("4"))
             {
-                this.divider();
-
-                Player trading = null;
-
-                System.out.println("\nWho would you like to trade with? ");
-                
-                int i = 1;
-                for(Player player : players)
-                {
-                    if(i != turn)
-                    {
-                        System.out.println(i + ") " + player.getName());
-                        i++;
-                    }
-                }
-
-                boolean flag = true;
-                while(flag)
-                {
-                    System.out.print("Enter Player's number: ");
-                    String recipientName = scan.nextLine();
-
-
-                    for(Player player : players)
-                    {
-                        if(player.getName().indexOf(recipientName) != -1)
-                        {
-                            flag = false;
-                            trading = player;
-                        }
-                    }
-
-                }
-
-                while(true)
-                {
-                    System.out.print("What would you like to trade? GPA or Properties? ");
-                    String exchangeType = scan.nextLine().toUpperCase();
-
-                    if(exchangeType.equals("GPA"))
-                    {
-                        // playerAtTurn.tradeGPA(trading, amount);
-                        break;
-                    }
-                    else if(exchangeType.equals("PROPERTY"))
-                    {
-                        // playerAtTurn.tradeProperty(trading, prop);
-                        break;
-                    }
-                }
-
-
-            }
-
-            else if(ans.equals("5"))
-            {
-                playerAtTurn.setInGame(false);
-                System.out.println("\n " + playerAtTurn.getName() + " has QUIT the game :(");
-                this.divider();
-                this.nextTurn();
+              gameOver = true;
+              break; //Change
             }
 
         }

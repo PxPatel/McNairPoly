@@ -7,7 +7,7 @@ public class Property extends Card
 
     public Property(String name, int loc, int cost, int rent)
     {
-        super(name, loc, false);
+        super(name, loc, false, false);
 
         this.cost = cost;
         isOwned = false;
