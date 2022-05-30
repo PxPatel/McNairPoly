@@ -364,21 +364,8 @@ public class McNairPoly
     {
         System.out.println("\n------------------------------------------------------");
     }
-    
-    public Player[] getPlayers()
-    {
-        return players;
-    }
 
-    public void getBoard()
-    {
-        for(Card i : board)
-        {
-            System.out.println(i);
-        }
-    }
-
-    public boolean isGameOver() //Change
+    public boolean isGameOver() 
     {
         return gameOver;
     }
