@@ -36,8 +36,5 @@ class Main
       g.divider();
       g.divider();
       System.out.println("\nGame Over!"); //Change
-
-      
-      
    }
 }

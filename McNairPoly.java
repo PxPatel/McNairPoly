@@ -11,8 +11,9 @@ public class McNairPoly
     private Scanner scan = new Scanner(System.in);
     
     private Card[] board;
-    private final int BOARD_SIZE = 24; //6 x 6 board lies
+    private final int BOARD_SIZE = 40 ; //11 x 11
 
+    private final int GPA_TO_WIN = 400;
     private final int waitTimer = 750; 
 
     public McNairPoly()
@@ -25,12 +26,12 @@ public class McNairPoly
             System.out.print("How many people are playing (> 1 and < 7)? ");
             num = scan.nextInt(); 
         }
+        numUsers = num;
 
         //To consume the empty line and not cause errors regarding the Scanner class
         scan.nextLine();
 
-        players = new Player[num];
-        numUsers = num;
+        players = new Player[numUsers];
          // Asks for player names and assigns them
 		for (int i = 0; i < numUsers; i++) 
         {
@@ -46,38 +47,53 @@ public class McNairPoly
         gameOver = false;
     }
 
-    public void initializeBoard()
+    private void initializeBoard()
     {
         board = new Card[BOARD_SIZE];
 
         board[0] = new Special("Go", 0, false, false, false, true);
         board[1] = new Property("Gym", 1, 5, 3);
-        board[2] = new Property("Mythology", 2, 7, 4);
-        board[3] = new Special("Small Tax - Forgot HW", 3, true, false, false, false);
-        board[4] = new Property("French 1", 4, 10, 5);
-        board[5] = new Special("Big Tax - Dress Coded", 5, true, false, false, false);
+        board[2] = new Chance(2, "GPA");
+        board[3] = new Property("Creative Writing",3, 7, 4);
+        board[4] = new Special("Small Tax - Forgot HW", 4, true, false, false, false);
+        board[5] = new Teleporter(5, 1);
+        board[6] = new Property("French 1", 6, 10, 5);
+        board[7] = new Chance(7, "Property");
+        board[8] = new Property("Driver\'s Ed", 8, 13, 7);
+        board[9] = new Property("Lit 3", 9, 16, 8);
+        board[10] = new Special("Big Tax - Dress Coded", 10, true, false, false, false);
 
-        board[6] = new Property("Driver\'s Ed", 6, 13, 7);
-        board[7] = new Property("Lit 3", 7, 16, 8);
-        board[8] = new Property("Chem Honors", 8, 18, 9);
-        board[9] = new Property("AP Environmental Science", 8, 20, 10);
+        board[11] = new Property("Chem Honors", 11, 18, 9);
+        board[12] = new Chance(12, "Property");
+        board[13] = new Property("AP Environmental Science", 13, 20, 10);
+        board[14] = new Property("JROTC", 14, 30, 15);
+        board[15] = new Teleporter(15, 2);
+        board[16] = new Property("Anatomy", 16, 35, 18);
+        board[17] = new Chance(17, "GPA");
+        board[18] = new Property("AP USH", 18, 37, 19);
+        board[19] = new Property("Mythology", 19, 56, 28);
 
-        board[10] = new Special("Detention", 9, false, false, true, false);
-        board[11] = new Property("AP Lit", 10, 30, 15);
-        board[12] = new Special("Small Tax - Forgot Project", 11, true, false, false, false);
-        board[13] = new Property("AP USH", 12, 35, 18);
-        board[14] = new Property("AP Calc AB", 13, 37, 19);
-        board[15] = new Special("Double Lunch", 14, false, true, false, false);
-        
-        board[16] = new Special("Small Tax - Late to Class", 16, true, false, false, false);
-        board[17] = new Property("AP Physics 1", 17, 56, 28);
-        board[18] = new Property("AP Chem", 18, 64, 32);
-        board[19] = new Property("AP Calc BC", 19, 70, 35); 
-        board[20] = new Teleporter(20, 1);
-        board[21] = new Teleporter(21, 2);
-        board[22] = new Teleporter(22, 3);
-        board[23] = new Teleporter(23, 4);
-        
+        board[20] = new Special("Double Lunch", 20, false, true, false, false);
+        board[21] = new Property("Financial Literacy", 21, 64, 32);
+        board[22] = new Chance(22, "GPA");
+        board[23] = new Property("AP Biology", 23, 70, 35); 
+        board[24] = new Property("French 3", 24, 70, 35); 
+        board[25] = new Teleporter(25, 3);
+        board[26] = new Property("Human Psychology", 26, 70, 35); 
+        board[27] = new Special("Small Tax - Late to Class", 27, true, false, false, false);
+        board[28] = new Chance(28, "Property");
+        board[29] = new Property("AP Spanish", 29, 70, 35); 
+        board[30] = new Special("Detention", 30, false, false, true, false);
+
+        board[31] = new Property("AP Calc AB", 31, 70, 35); 
+        board[32] = new Property("AP Government", 32, 70, 35); 
+        board[33] = new Chance(33, "Property");
+        board[34] = new Property("AP Environmental Science", 34, 70, 35); 
+        board[35] = new Teleporter(35, 4);
+        board[36] = new Chance(36, "GPA");
+        board[37] = new Property("AP Chem", 37, 64, 32);
+        board[38] = new Special("Small Tax - Forgot Project", 38, true, false, false, false);
+        board[39] = new Property("AP Calc BC", 39, 64, 32);
     }
 
     private void sleep()
@@ -150,10 +166,10 @@ public class McNairPoly
             {
                 playerAtTurn.payTax(landed);
             }
-            // else if(landed.isDoubleLunch)
-            // {
-            //     mainPlayer.inDoubleLunch();
-            // }
+            else if(((Special) landed).isDoubleLunch())
+            {
+                System.out.println("\nEnjoy the Free Period!");
+            }
             else if(((Special) landed).isDetention())
             {
                 playerAtTurn.putInDetention();
@@ -171,7 +187,7 @@ public class McNairPoly
           playerAtTurn.setPos(refinedLoc);
           playerAtTurn.setCurrent(board[refinedLoc]);
 
-          System.out.println("\n" + playerAtTurn.getName() + " will be teleported to " + board[refinedLoc].getName());
+          System.out.println("\n" + playerAtTurn.getName() + " will be teleported to " + board[refinedLoc]);
           
           action();
         }
@@ -234,6 +250,7 @@ public class McNairPoly
                     playerAtTurn.payRent(landed);
                     sleep();
                     System.out.println("\n[RENT] " + playerAtTurn.getName() + " has payed $" + ((Property) landed).getRent() + " to " + ((Property) landed).getOwner().getName());
+                    ((Property) landed).incrementRentLevel();
                 }
                 else
                 {
@@ -272,25 +289,37 @@ public class McNairPoly
             playerAtTurn.setDaysInJail(playerAtTurn.getDaysInJail() + 1);
             sleep();
         }
-        
     }
 
     public boolean checkIfWinner()
     {
         boolean winnerByGPA = false;
         int numPlayersInGame = 0;
+        Player saveFirstPlayer = null;
 
         for(Player p : players)
         {
             if(p.getIsInGame())
             {
                 numPlayersInGame++;
-                if(p.getGPA() >= 375)
+                if(numPlayersInGame == 1)
+                {
+                    saveFirstPlayer = p;
+                }
+
+                if(p.getGPA() >= GPA_TO_WIN)
                 {
                     winnerByGPA = true;
+                    System.out.println("\n" + p.getName() + " HAS WON!");
                 }
             }
         }
+
+        if(numPlayersInGame == 1)
+        {
+            System.out.println("\n" + saveFirstPlayer.getName() + " HAS WON!");
+        }
+
         return winnerByGPA || numPlayersInGame == 1;
     }
     
@@ -351,13 +380,13 @@ public class McNairPoly
 
     public boolean isGameOver() //Change
     {
-    return gameOver;
+        return gameOver;
     }
   
     public void choices()
     {
         System.out.println(
-        "\n" + playerAtTurn.getName() + ", choose what you would like to do: \n1) Roll and Move\n\n2) Check your Stats\n\n3) Check all players' Stats\n\n4) Quit Game");
+        "\n" + playerAtTurn.getName() + ", choose what you would like to do: \n1) Roll and Move\n\n2) Check your Stats\n\n3) Check all players' Stats\n\n4) End Game");
         
         while(true)
         {

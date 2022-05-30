@@ -16,7 +16,7 @@ public class Player
     {
         this.name = name.toUpperCase();
         pos = 0;
-        GPA = 100;
+        GPA = 200;
         isInGame = true;
         propertiesOwned = new ArrayList<Property>();
         current = new Special("Go", 0, false, false, false, true);
@@ -38,7 +38,7 @@ public class Player
             obj.addProperty((Property) prop);
         }
 
-        for(int i = propertiesOwned.size(); i >= 0; i++)
+        for(int i = propertiesOwned.size()-1; i >= 0; i++)
         {
             propertiesOwned.remove(i);
         }
@@ -54,7 +54,7 @@ public class Player
             ((Property) prop).setOwner(null);
         }
         
-        for(int i = propertiesOwned.size(); i >= 0; i++)
+        for(int i = propertiesOwned.size()-1; i >= 0; i++)
         {
             propertiesOwned.remove(i);
         }

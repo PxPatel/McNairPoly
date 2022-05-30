@@ -3,16 +3,21 @@ public class Property extends Card
     private int cost;
     private boolean isOwned;
     private Player owner;
-    private int rent;
+    private int baseRent;
 
-    public Property(String name, int loc, int cost, int rent)
+    private final int[] rentMultiplier = {1, 2, 3, 4, 5};
+    private int rentLevel;
+
+    public Property(String name, int loc, int cost, int baseRent)
     {
         super(name, loc, true, false, false, false);
 
         this.cost = cost;
-        isOwned = false;
-        owner = null;
-        this.rent = rent;
+        this.isOwned = false;
+        this.owner = null;
+        this.baseRent = baseRent;
+
+        this.rentLevel = 0;
     }
 
     public int getCost() {
@@ -40,11 +45,31 @@ public class Property extends Card
     }
 
     public int getRent() {
-        return rent;
+        return baseRent * rentMultiplier[rentLevel];
     }
 
-    public void setRent(int rent) {
-        this.rent = rent;
+    public void setRent(int baseRent) {
+        this.baseRent = baseRent;
+    }
+
+    public int[] getRentMultiplier() {
+        return rentMultiplier;
+    }
+
+    public int getRentLevel() {
+        return rentLevel;
+    }
+
+    public void setRentLevel(int rentLevel) {
+            this.rentLevel = rentLevel;
+    }
+
+    public void incrementRentLevel()
+    {
+        if(rentLevel < 4)
+        {
+            this.rentLevel++;
+        }
     }
 
     @Override
@@ -52,11 +77,11 @@ public class Property extends Card
     {
         if(isOwned)
         {
-            return super.getName() + " [Owner = " + owner.getName() + ", Rent = " + rent + "]";
+            return super.getName() + " [Owner = " + owner.getName() + ", Rent = " + this.getRent() + "]";
         }
         else
         {
-            return super.getName() + " [Cost = " + cost + ", Rent = " + rent + "]";
+            return super.getName() + " [Cost = " + cost + ", Rent = " + baseRent + "]";
         }
     }
 }

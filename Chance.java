@@ -7,21 +7,21 @@ public class Chance extends Card
 
     public Chance(int loc, String chanceType)
     {
-        super("Chance!", loc, false, false, false, true);
+        super("Chance! " + chanceType, loc, false, false, false, true);
         this.chanceType = chanceType;
     }
 
 
     public void chanceProperty(Player user, Card[] board)
     {
-        int addOrSub = (int)(Math.random() + 1);
+        int addOrSub = (int)(Math.random() * 2);
         ArrayList<Property> copyOfProperties = user.getPropertiesOwned();
 
         if(addOrSub == 0)
         {
             while(true)
             { 
-                int idx = (int)(Math.random() * board.length); // [0, board.length]
+                int idx = (int)(Math.random() * board.length); // [0, board.length)
                 
                 if(board[idx].isProperty())
                 {
@@ -30,40 +30,47 @@ public class Chance extends Card
                     if(! ((Property) prop).getIsOwned() )
                     {
                         user.addProperty((Property) prop);
+                        System.out.println("\n[LUCKY] " + user.getName() + " just got {" + prop.getName() + "} out of Chance!" );
                         break;
                     }
                 }
             }
 
-            //Add Print
+            
         }
         else if(addOrSub == 1)
         {
-            int randPropIndex = (int)(Math.random() * copyOfProperties.size()); // [0, userCurrentProperties.size()] 
-            copyOfProperties.remove(randPropIndex);
+            if(copyOfProperties.size() > 0)
+            {
+                int randPropIndex = (int)(Math.random() * copyOfProperties.size()); // [0, userCurrentProperties.size())
+                Property prop = copyOfProperties.remove(randPropIndex);
+                user.setPropertiesOwned(copyOfProperties);
 
-            user.setPropertiesOwned(copyOfProperties);
+                System.out.println("\n[UNLUCKY] " + user.getName() + " just lost {" + prop.getName() + "} out of Chance!" );
+            }
 
-            //Add Print
+            else
+            {
+                System.out.println("\n[NOTHING TO LOSE] " + user.getName() + " has no properties to lose");
+            }
         }
     }
 
     public void chanceGPA(Player user)
     {
-        int addOrSub = (int)(Math.random() + 1);
+        int addOrSub = (int)(Math.random() * 2);
         int amountOfGPA = (int)(Math.random() * 100);
         int userCurrentGPA = user.getGPA();
 
         if(addOrSub == 0)
         {
             user.setGPA(userCurrentGPA + amountOfGPA);
-
-            //Add Print State
+            System.out.println("\n[LUCKY] " + user.getName() + " just got {" + amountOfGPA + "} GPA out of Chance!" );
         }
         else if(addOrSub == 1)
         {
             user.setGPA(userCurrentGPA - amountOfGPA);
-            //Add Print State
+            System.out.println("\n[UNLUCKY] " + user.getName() + " just lost {" + amountOfGPA + "} GPA out of Chance!" );
         }
     }
 
