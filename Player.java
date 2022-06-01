@@ -5,6 +5,8 @@ public class Player
     private String name;
     private int pos;
     private int GPA;
+    private final int STARTING_GPA = 150;
+    
     private boolean isInGame;
     private ArrayList<Property> propertiesOwned;
     private Card current; 
@@ -16,7 +18,7 @@ public class Player
     {
         this.name = name.toUpperCase();
         pos = 0;
-        GPA = 200;
+        GPA = STARTING_GPA;
         isInGame = true;
         propertiesOwned = new ArrayList<Property>();
         current = new Special("Go", 0, false, false, false, true);
@@ -38,7 +40,7 @@ public class Player
             obj.addProperty((Property) prop);
         }
 
-        for(int i = propertiesOwned.size()-1; i >= 0; i++)
+        for(int i = propertiesOwned.size()-1; i >= 0; i--)
         {
             propertiesOwned.remove(i);
         }
@@ -54,7 +56,7 @@ public class Player
             ((Property) prop).setOwner(null);
         }
         
-        for(int i = propertiesOwned.size()-1; i >= 0; i++)
+        for(int i = propertiesOwned.size()-1; i >= 0; i--)
         {
             propertiesOwned.remove(i);
         }
@@ -77,8 +79,8 @@ public class Player
     public void payRent(Card prop)
     {
         Player propOwner = ((Property) prop).getOwner();
-        propOwner.addGPA(((Property)prop).getCost());
-        this.GPA -= ((Property)prop).getCost();
+        propOwner.addGPA(((Property)prop).getRent());
+        this.GPA -= ((Property)prop).getRent();
     }
     
     public void payTax(Card prop)
@@ -186,7 +188,7 @@ public class Player
             int i = 1;
             for(Property prop : propertiesOwned)
             {
-                propOwned += i + ") " + prop.getName() + " ";
+                propOwned += "\n\t" + i + ") " + prop.getName() + " ";
                 i++;
             }
             

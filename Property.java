@@ -5,7 +5,7 @@ public class Property extends Card
     private Player owner;
     private int baseRent;
 
-    private final int[] rentMultiplier = {1, 2, 3, 4, 5};
+    private final double[] rentMultiplier = {1, 1.25, 1.5, 2, 2.5};
     private int rentLevel;
 
     public Property(String name, int loc, int cost, int baseRent)
@@ -45,14 +45,14 @@ public class Property extends Card
     }
 
     public int getRent() {
-        return baseRent * rentMultiplier[rentLevel];
+        return (int)(baseRent * rentMultiplier[rentLevel]);
     }
 
     public void setRent(int baseRent) {
         this.baseRent = baseRent;
     }
 
-    public int[] getRentMultiplier() {
+    public double[] getRentMultiplier() {
         return rentMultiplier;
     }
 
@@ -77,7 +77,7 @@ public class Property extends Card
     {
         if(isOwned)
         {
-            return super.getName() + " [Owner = " + owner.getName() + ", Rent = " + this.getRent() + "]";
+            return super.getName() + " [Owner = " + owner.getName() + ", Rent = " + this.getRent() + ", Rent Level = " + (rentLevel+1) + "/5 ]";
         }
         else
         {

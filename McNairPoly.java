@@ -59,41 +59,41 @@ public class McNairPoly
         board[5] = new Teleporter(5, 1);
         board[6] = new Property("French 1", 6, 10, 5);
         board[7] = new Chance(7, "Property");
-        board[8] = new Property("Driver\'s Ed", 8, 13, 7);
-        board[9] = new Property("Lit 3", 9, 16, 8);
+        board[8] = new Property("Driver\'s Ed", 8, 11, 7);
+        board[9] = new Property("Lit 3", 9, 13, 8);
         board[10] = new Special("Big Tax - Dress Coded", 10, true, false, false, false);
 
-        board[11] = new Property("Chem Honors", 11, 18, 9);
+        board[11] = new Property("Chem Honors", 11, 15, 9);
         board[12] = new Chance(12, "Property");
-        board[13] = new Property("AP Environmental Science", 13, 20, 10);
-        board[14] = new Property("JROTC", 14, 30, 15);
+        board[13] = new Property("AP Environmental Science", 13, 15, 10);
+        board[14] = new Property("JROTC", 14, 17, 10);
         board[15] = new Teleporter(15, 2);
-        board[16] = new Property("Anatomy", 16, 35, 18);
+        board[16] = new Property("Anatomy", 16, 20, 13);
         board[17] = new Chance(17, "GPA");
-        board[18] = new Property("AP USH", 18, 37, 19);
-        board[19] = new Property("Mythology", 19, 56, 28);
+        board[18] = new Property("AP USH", 18, 22, 16);
+        board[19] = new Property("Mythology", 19, 25, 19);
 
         board[20] = new Special("Double Lunch", 20, false, true, false, false);
-        board[21] = new Property("Financial Literacy", 21, 64, 32);
+        board[21] = new Property("Financial Literacy", 21, 29, 19);
         board[22] = new Chance(22, "GPA");
-        board[23] = new Property("AP Biology", 23, 70, 35); 
-        board[24] = new Property("French 3", 24, 70, 35); 
+        board[23] = new Property("AP Biology", 23, 31, 20); 
+        board[24] = new Property("French 3", 24, 36, 21); 
         board[25] = new Teleporter(25, 3);
-        board[26] = new Property("Human Psychology", 26, 70, 35); 
+        board[26] = new Property("Human Psychology", 26, 40, 22); 
         board[27] = new Special("Small Tax - Late to Class", 27, true, false, false, false);
         board[28] = new Chance(28, "Property");
-        board[29] = new Property("AP Spanish", 29, 70, 35); 
+        board[29] = new Property("AP Spanish", 29, 42, 17); 
         board[30] = new Special("Detention", 30, false, false, true, false);
 
-        board[31] = new Property("AP Calc AB", 31, 70, 35); 
-        board[32] = new Property("AP Government", 32, 70, 35); 
+        board[31] = new Property("AP Calc AB", 31, 47, 18); 
+        board[32] = new Property("AP Government", 32, 50, 19); 
         board[33] = new Chance(33, "Property");
-        board[34] = new Property("AP Environmental Science", 34, 70, 35); 
+        board[34] = new Property("AP Environmental Science", 34, 55, 20); 
         board[35] = new Teleporter(35, 4);
         board[36] = new Chance(36, "GPA");
-        board[37] = new Property("AP Chem", 37, 64, 32);
+        board[37] = new Property("AP Chem", 37, 64, 25);
         board[38] = new Special("Small Tax - Forgot Project", 38, true, false, false, false);
-        board[39] = new Property("AP Calc BC", 39, 64, 32);
+        board[39] = new Property("AP Calc BC", 39, 70, 30);
     }
 
     private void sleep()
@@ -199,13 +199,6 @@ public class McNairPoly
             if(type.equals("GPA"))
             {
                 ((Chance) landed).chanceGPA(playerAtTurn);
-                if(playerAtTurn.getGPA() < 0)
-                {
-                    playerAtTurn.bankruptToBank();
-                    sleep();
-                    System.out.println(playerAtTurn.getName() + " is BANKRUPT!");
-                }
-
             }
             else if(type.equals("Property"))
             {
@@ -245,7 +238,11 @@ public class McNairPoly
             }
             else if(((Property) landed).getIsOwned())
             {
-                if(playerAtTurn.getGPA() > ((Property) landed).getRent())
+                if(((Property) landed).getOwner().getName().equals(playerAtTurn.getName()))
+                {
+                    System.out.println("\n[NOTHING] " + playerAtTurn.getName() + " landed on their own property, so nothing happens :|");
+                }
+                else if(playerAtTurn.getGPA() > ((Property) landed).getRent())
                 {
                     playerAtTurn.payRent(landed);
                     sleep();
@@ -286,10 +283,23 @@ public class McNairPoly
         }
         else
         {
+            System.out.println("\n\n[STILL IN JAIL] You didn't make it out of jail :(");
             playerAtTurn.setDaysInJail(playerAtTurn.getDaysInJail() + 1);
             sleep();
         }
     }
+
+
+    public void checkBankrupcy()
+  {
+    if(playerAtTurn.getGPA() < 0 && playerAtTurn.getIsInGame())
+    {
+      playerAtTurn.setInGame(false);
+      playerAtTurn.bankruptToBank();
+      sleep();
+      System.out.println("\n" + playerAtTurn.getName() + " is BANKRUPT!");
+    }
+  }
 
     public boolean checkIfWinner()
     {

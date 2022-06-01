@@ -30,6 +30,9 @@ public class Chance extends Card
                     if(! ((Property) prop).getIsOwned() )
                     {
                         user.addProperty((Property) prop);
+                        ((Property) prop).setIsOwned(true);
+                        ((Property) prop).setOwner(user);
+                      
                         System.out.println("\n[LUCKY] " + user.getName() + " just got {" + prop.getName() + "} out of Chance!" );
                         break;
                     }
@@ -43,7 +46,12 @@ public class Chance extends Card
             if(copyOfProperties.size() > 0)
             {
                 int randPropIndex = (int)(Math.random() * copyOfProperties.size()); // [0, userCurrentProperties.size())
+
+                user.getPropertiesOwned().get(randPropIndex).setOwner(null);
+                user.getPropertiesOwned().get(randPropIndex).setIsOwned(false);
+              
                 Property prop = copyOfProperties.remove(randPropIndex);
+              
                 user.setPropertiesOwned(copyOfProperties);
 
                 System.out.println("\n[UNLUCKY] " + user.getName() + " just lost {" + prop.getName() + "} out of Chance!" );

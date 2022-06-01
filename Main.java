@@ -16,6 +16,7 @@ class Main
             {
                 g.move(); //moves the player
                 g.action(); //allows the player to choose
+                g.checkBankrupcy();
                 g.nextTurn(); // gives the next player a turn
                 g.divider(); // creates more dashes. 
             }
