@@ -7,12 +7,12 @@ class Main
         g.divider(); // prints the dashes within the program (in console)
         
         //Runs game while no winner
-        while(!g.checkIfWinner()) //Change
+        while(!g.checkIfWinner())
         {
 
             g.choices(); 
           
-            if(!g.isPlayerInJail() && !g.isGameOver()) //Change
+            if(!g.isPlayerInJail() && !g.isGameOver())
             {
                 g.move(); //moves the player
                 g.action(); //allows the player to choose
@@ -21,14 +21,14 @@ class Main
                 g.divider(); // creates more dashes. 
             }
 
-            else if(g.isPlayerInJail() && !g.isGameOver()) //Change
+            else if(g.isPlayerInJail() && !g.isGameOver())
             {
                 g.inJailAction();
                 g.nextTurn();
-                g.divider(); //Change
+                g.divider(); 
             }
 
-            else //Change
+            else 
             {
               break;
             }
@@ -36,6 +36,6 @@ class Main
 
       g.divider();
       g.divider();
-      System.out.println("\nGame Over!"); //Change
+      System.out.println("\nGame Over!");
    }
 }

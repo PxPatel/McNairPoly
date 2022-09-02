@@ -37,7 +37,7 @@ public class McNairPoly
         {
 			System.out.print("What is Player " + (i + 1) + "'s name? ");
 			String name = scan.nextLine();
-			players[i] = new Player(name);
+			players[i] = new Player(name); 
 		}
 
         //Initalizes the array and creates a Property objects
@@ -147,7 +147,7 @@ public class McNairPoly
 
     public boolean isPlayerInJail()
     {
-        if(playerAtTurn.getIsInGame() && playerAtTurn.isInJail()) //Change
+        if(playerAtTurn.getIsInGame() && playerAtTurn.isInJail())
         {
             return true;
         }
@@ -368,7 +368,7 @@ public class McNairPoly
                 temp = (temp + 1) % numUsers;
             }
         }
-    }
+    } 
 
     public void divider()
     {
@@ -408,7 +408,7 @@ public class McNairPoly
             else if(ans.equals("4"))
             {
               gameOver = true;
-              break; //Change
+              break; 
             }
 
         }
